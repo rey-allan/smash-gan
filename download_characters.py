@@ -25,12 +25,15 @@ if __name__ == '__main__':
 
     for character in characters:
         print(f'Downloading: {character}')
+        # Create the subdirectory for each character
+        Path(f'data/{character}').mkdir(exist_ok=True)
     
         for skin in range(0, 8):
             # Define the skin based on the format used by Nintendo
             skin = str(skin + 1) if skin != 0 else ''
-            path = f'data/{character}{skin}.png'
-            
+            # Define the path where the images will be stored
+            path = f'data/{character}/{character}{skin}.png'
+
             # Check for existence to allow resuming the script
             if Path(path).exists():
                 continue
