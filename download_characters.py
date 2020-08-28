@@ -3,6 +3,7 @@ import shutil
 import time
 
 from pathlib import Path
+from PIL import Image
 
 
 # Mii Fighter wasn't considered because the images had the names on them which could confuse the algorithm
@@ -25,14 +26,16 @@ if __name__ == '__main__':
 
     for character in characters:
         print(f'Downloading: {character}')
+
         # Create the subdirectory for each character
-        Path(f'data/{character}').mkdir(exist_ok=True)
+        folder = Path(f'data/{character}')
+        folder.mkdir(exist_ok=True)
     
         for skin in range(0, 8):
             # Define the skin based on the format used by Nintendo
             skin = str(skin + 1) if skin != 0 else ''
             # Define the path where the images will be stored
-            path = f'data/{character}/{character}{skin}.png'
+            path = folder.joinpath(f'{character}{skin}.png')
 
             # Check for existence to allow resuming the script
             if Path(path).exists():
@@ -42,10 +45,24 @@ if __name__ == '__main__':
             r = requests.get(url, stream=True)
 
             if r.status_code == 200:
-                with open(f'data/{character}{skin}.png', 'wb') as f:
+                with open(path, 'wb') as f:
                     shutil.copyfileobj(r.raw, f)
             else:
                 failed.append(url)
+
+            # Convert to RGB with a black background
+            # We can't really work with transparent images
+            with open(path, 'rb') as f:
+                img = Image.open(f)
+                img.convert("RGBA")
+
+                # Create a black image
+                new_img = Image.new('RGBA', img.size, (0, 0, 0, 0))
+                # Paste the original image into this new black background using the alpha channel as mask
+                new_img.paste(img, mask=img.split()[-1])
+
+                # Save the image as RGB
+                new_img.convert('RGB').save(path)
 
         time.sleep(.1)
 
