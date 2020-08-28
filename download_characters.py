@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 img.convert("RGBA")
 
                 # Create a black image
-                new_img = Image.new('RGBA', img.size, (0, 0, 0, 0))
+                new_img = Image.new('RGBA', img.size, (0, 0, 0, 255))
                 # Paste the original image into this new black background using the alpha channel as mask
                 new_img.paste(img, mask=img.split()[-1])
 
