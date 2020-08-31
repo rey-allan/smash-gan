@@ -1,4 +1,5 @@
 venv/
 .ipynb_checkpoints/
+original/**/*.png
 data/**/*.png
 *.log

@@ -28,7 +28,7 @@ if __name__ == '__main__':
         print(f'Downloading: {character}')
 
         # Create the subdirectory for each character
-        folder = Path(f'data/{character}')
+        folder = Path(f'original/{character}')
         folder.mkdir(exist_ok=True)
     
         for skin in range(0, 8):
